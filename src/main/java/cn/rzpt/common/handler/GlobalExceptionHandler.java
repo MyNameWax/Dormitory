@@ -3,12 +3,14 @@ package cn.rzpt.common.handler;
 import cn.rzpt.common.lang.Result;
 import cn.rzpt.common.lang.ResultCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ValidationException;
 import java.sql.SQLSyntaxErrorException;
 
 /**
@@ -27,9 +29,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result error(Exception e) {
-       // e.printStackTrace();
         log.error(e.getMessage());
-       // e.printStackTrace();
         return Result.error();
     }
 
@@ -63,5 +63,10 @@ public class GlobalExceptionHandler {
     public Result error(BusinessException e) {
         log.error(e.getErrMsg());
         return Result.error().code(e.getCode()).message(e.getErrMsg());
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Result error(HttpMessageNotReadableException e) {
+        log.error(e.getMessage());
+        return Result.error().code(ResultCode.PARAM_NOT_COMPLETE.getCode()).message(ResultCode.PARAM_NOT_COMPLETE.getMessage());
     }
 }

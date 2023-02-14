@@ -1,11 +1,8 @@
-#????
 server:
   port: 80
 spring:
   application:
     name: ss
-
-  #?????
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sushe?serverTimezone=Asia/Shanghai
@@ -17,7 +14,6 @@ spring:
       max-active: 20
       min-idle: 5
       connect-timeout: 20000
-#Redis??
   redis:
     host: 192.168.188.100
     port: 6379
@@ -28,7 +24,6 @@ spring:
         max-idle: 10
         min-idle: 1
         time-between-eviction-runs: 10s
-#MyBatis-Plus??
 mybatis-plus:
   global-config:
     db-config:
@@ -39,7 +34,6 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:/mapper/*Mapper.xml
-#Jwt??
 rzpt:
   jwts:
     expire: 604800

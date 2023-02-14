@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.annotation.Resource;
+
 /**
  * @author wax
  * @Description SpringSecurity配置
@@ -28,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/login",
             "/logout",
             "/captcha",
-            "/sys-user/register"
+            "/sysuser/register"
     };
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
@@ -44,6 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
@@ -79,8 +84,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //除了白名单以外的所有请求，都需要登录认证后才可以进行访问
                 .anyRequest().authenticated()
                 .and()
+                .logout()
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .and()
                 .exceptionHandling()
+                //未登录用户访问
                 .authenticationEntryPoint(authenticationEntryPoint)
+                //访问权限不足
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
                 .addFilter(jwtAuthenticationFilter());
